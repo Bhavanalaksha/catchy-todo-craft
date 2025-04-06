@@ -1,10 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { Link } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/context/AuthContext';
 import TaskForm from '@/components/TaskForm';
 import TaskList from '@/components/TaskList';
 import CategoryFilter from '@/components/CategoryFilter';
 import { Task } from '@/types/task';
+import { Button } from '@/components/ui/button';
+import { User } from 'lucide-react';
 
 const Index = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -13,6 +17,7 @@ const Index = () => {
   });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
@@ -90,9 +95,19 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="container max-w-2xl px-4 py-12">
-        <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Task Master</h1>
-          <p className="text-muted-foreground">Stay organized and boost your productivity</p>
+        <header className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-3xl font-bold">Task Master</h1>
+            <Link to="/profile">
+              <Button variant="outline" size="sm" className="gap-2">
+                <User size={16} />
+                Profile
+              </Button>
+            </Link>
+          </div>
+          <p className="text-muted-foreground text-center">
+            Welcome, {user?.email}! Stay organized and boost your productivity.
+          </p>
         </header>
         
         <TaskForm onAddTask={handleAddTask} />
