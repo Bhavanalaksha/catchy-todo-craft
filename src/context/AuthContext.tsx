@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client'; // Update to use the client from integrations
 import { useToast } from '@/hooks/use-toast';
 
 type AuthContextType = {
@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) {
+        console.error("Sign in error:", error.message);
         toast({
           title: "Error signing in",
           description: error.message,
@@ -59,6 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
       }
     } catch (error) {
+      console.error("Unexpected sign in error:", error);
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred",
@@ -75,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signUp({ email, password });
       
       if (error) {
+        console.error("Sign up error:", error.message);
         toast({
           title: "Error signing up",
           description: error.message,
@@ -87,6 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
       }
     } catch (error) {
+      console.error("Unexpected sign up error:", error);
       toast({
         title: "Error signing up",
         description: "An unexpected error occurred",
@@ -106,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "You have been successfully signed out",
       });
     } catch (error) {
+      console.error("Sign out error:", error);
       toast({
         title: "Error signing out",
         description: "An unexpected error occurred",
